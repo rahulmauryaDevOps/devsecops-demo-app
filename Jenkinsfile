@@ -53,8 +53,12 @@ pipeline {
 
         stage('OWASP Dependency-Check') {
             steps {
-                // Scans pom.xml dependencies against the NVD vulnerability database
-                dependencyCheck additionalArguments: '--scan . --format HTML --format XML', odcInstallation: 'OWASP-DC'
+                // withCredentials pulls the NVD key from Jenkins Credentials store
+                // and exposes it as an env var only for this block (not logged/printed)
+                withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_KEY')]) {
+                    // Scans pom.xml dependencies against the NVD vulnerability database
+                    dependencyCheck additionalArguments: "--scan . --format HTML --format XML --nvdApiKey ${NVD_KEY}", odcInstallation: 'OWASP-DC'
+                }
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
