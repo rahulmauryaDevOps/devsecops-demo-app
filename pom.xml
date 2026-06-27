@@ -23,6 +23,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <tomcat.version>10.1.55</tomcat.version>
     </properties>
 
     <dependencies>
