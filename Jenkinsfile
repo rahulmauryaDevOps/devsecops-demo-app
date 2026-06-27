@@ -57,7 +57,8 @@ pipeline {
                 // and exposes it as an env var only for this block (not logged/printed)
                 withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_KEY')]) {
                     // Scans pom.xml dependencies against the NVD vulnerability database
-                    dependencyCheck additionalArguments: "--scan . --format HTML --format XML --nvdApiKey ${NVD_KEY}", odcInstallation: 'OWASP-DC'
+                    // --out . writes the HTML/XML reports into the workspace root so the publisher can find them
+                    dependencyCheck additionalArguments: "--scan . --format HTML --format XML --out . --nvdApiKey ${NVD_KEY}", odcInstallation: 'OWASP-DC'
                 }
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
